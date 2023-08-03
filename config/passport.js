@@ -55,9 +55,9 @@ passport.use(
 passport.use(
   new GoogleStrategy(
     {
-      // 把這段隱藏起來 "15799745358-et7lrdm9kstnenvmn0ttpuktncqstbul.apps.googleusercontent.com", // 在 gooogle 雲端 API 服務 創建的 OAuth 用戶端編號
+      // 把這段隱藏起來 在 gooogle 雲端 API 服務 創建的 OAuth 用戶端編號
       clientID: process.env.GOOGLE_CLIENT_ID,
-      // 這個跟上面一樣 "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", // 在 gooogle 雲端 API 服務 創建的 OAuth 用戶端密鑰
+       // 在 gooogle 雲端 API 服務 創建的 OAuth 用戶端密鑰
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: "/auth/google/redirect",
     },
