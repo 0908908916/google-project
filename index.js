@@ -20,13 +20,11 @@ const flash = require("connect-flash");
 // 要運用 mongoDB 網頁雲端串api 網址 步驟為 到這個 database 之後 點按鈕 Connect 再來 Drivers 這個選項
 // 選向下拉是選單 Driver  Node.js    Version  3.6 or later  把下面的網址複製 然後用字串的方式貼過來
 // 再來下面就是一般的設定了 然後 npm 要載入模組 npm install mongodb@3.6
-// 然後以下的網址 <password> 要取代掉 打上我設定的密碼 778899password
+// 然後以下的網址 <password> 要取代掉 打上我設定的密碼 
 mongoose
   .connect(
     // 這樣就把他的 passport 藏起來了
     process.env.DB_CONNECT,
-    // 這下面的網址應該把它隱藏 所以用到 .env 裡面 先註解方便理解
-    // "mongodb+srv://778899:778899password@cluster0.gfympf8.mongodb.net/?retryWrites=true&w=majority",
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => {
@@ -47,7 +45,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // 這個後來刪除 留著方便辨識這是幹嘛的
 
-// 把 cookieSession 放在 route 前面 在 .env 文檔 加一個 SECRET=THISISMYSECRETWOW
+// 把 cookieSession 放在 route 前面 
 // app.use(
 //   cookieSession({
 //     keys: [process.env.SECRET],
