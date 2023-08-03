@@ -30,7 +30,7 @@ project-5 他是一個系統 在做登入有兩種選擇  第一種是用 google
 
 接下來 按下找到  Database Access 你要來創建數據庫的使用者 點入按鈕 Add New Database User
 
-然後用他的 Password 方式來使用他 寫下 user 778899 password 778899password  設定裡面有個 Built-in Role 下拉是選單選取 Read and write to any database
+然後用他的 Password 方式來使用他 寫下 user  password   設定裡面有個 Built-in Role 下拉是選單選取 Read and write to any database
 然後按下按鈕 Add User
 
 這樣就有一個新的 database 使用者   
@@ -102,7 +102,7 @@ passport-google-oauth20 他的網址為: https://www.passportjs.org/packages/pas
 再回到文檔 index.js 然後開一個 多增加一個文檔 .env 檔  把 index.js 裡面的 passport 刪除隱藏起來 
 再來到 .env 文檔 填入程式碼  把 index.js 的 passport 藏到 .env 裡面 
 
-.env 輸入為  DB_CONNECT="mongodb+srv://778899:778899password@cluster0.gfympf8.mongodb.net/?retryWrites=true&w=majority" 
+.env 輸入
 這樣就把藏好了 再回到  index.js 把  DB_CONNECT 這個貼過來 填入程式碼
 
 之後再到 passport.js 把地的 clientID 跟 clientSecret 隱藏 用跟上面一樣 把它隱藏起來 
