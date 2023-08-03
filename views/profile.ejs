@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include ("partials/header") %>
+    <title>Login</title>
+  </head>
+  <body>
+    <%- include ("partials/nav") %>
+    <h1>Welcome to <%= user.name %> `s page.</h1> <!-- 從 user 資料裡面導出顯示 name user資料可以用 console.log()資料可以用 console.log(req.user) -->
+    <!-- 以下程式碼會顯示圖片 id 跟什麼時間在網頁上  -->
+    <img src="<%= user.thumbnail %>" alt="" />
+    <p><%= user.gogleID %></p>
+    <p><%= user.date %></p>
+    <% if (posts.lenght > 0) { %> <% for (let i = 0; i < posts.lenght; i++) { %>
+    <div class="card" style="width: 18rem;">
+      <div class="card-body">
+        <!-- posts 的 title content date 都在這邊 -->
+        <h5 class="card-title"><%= posts[i].title %></h5>
+        <p class="card-text"><%= posts[i].content %></p>
+        <a href="#" class="btn btn-primary"><%= posts[i].date %></a>
+      </div>
+    </div>  
+    <% } %> <% } %>  
+  </body>
+</html>

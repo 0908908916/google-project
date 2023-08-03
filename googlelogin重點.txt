@@ -1,0 +1,327 @@
+他要  npm init 
+npm install express nodemon mongoose ejs dotenv 之後有遇到要裝的模組再裝
+
+TypeError: req.logIn is not a function
+
+因為passport的版本更新問題，如果你在之後課程有遇到這個Error的話，你可以用以下兩種方式(二擇一即可)：
+
+1. npm i passport@0.3.2
+
+在terminal or command line prompt執行這段程式碼，降低passport的版本
+
+2. 照著影片繼續寫code，直到處理完serialize & deserialize，這個error就不會出現了。
+
+
+project-5 他是一個系統 在做登入有兩種選擇  第一種是用 google 來登入 另外一種是可以註冊網站來登入
+也可以幫自己登出 可以添加按鈕 會用到的工具有 EJS MongoDB Atlas Passport.js 更深入的認識認證的機制
+
+製作這個物件 先來網站搜尋 mongodb atlas  他是一個雲端服務不用安裝就可以有這個數據庫  網址為: https://www.mongodb.com/atlas/database
+
+再來點入 Tree free 做登入的動作 可用 google 登入 
+
+創建 設定 database 服務器免費 按鈕 aws 然後 Additional Settings 版本改成 MongoDB 4.4  
+
+登入後到  https://cloud.mongodb.com/v2/6468222c18cf41790c88050a#/security/network/accessList 這個網址
+然後 點入 SECURLTY 裡面的 Network Access 裡面要來設定 什麼的  IP addresses 可以訪問你的 cluster.
+
+再來點入 Add IP Address 的按鈕 第一個點入 +ADD CURRENT IP ADDRESS 出現 IP 位置 然後點入按鈕 Confirm 這是第一個步驟
+
+再來 按一次 +ADD IP ADDRESS  在按下 ALLOW ACCESS FROM ANYWHERE 任何人都可以訪問你的  IP ADDRESS 在按下 Confirm
+
+接下來 按下找到  Database Access 你要來創建數據庫的使用者 點入按鈕 Add New Database User
+
+然後用他的 Password 方式來使用他 寫下 user 778899 password 778899password  設定裡面有個 Built-in Role 下拉是選單選取 Read and write to any database
+然後按下按鈕 Add User
+
+這樣就有一個新的 database 使用者   
+
+再來到 index.js 撰寫程式碼 其他檔案線上教學寫好了 資料夾 views 建一個 index.ejs, 然後開一個資料夾
+partials 裡面用個檔案 header.ejs 都是內建寫好的
+
+寫完之後跑一次網站 用終端機打指令 nodemon index.js
+再來用 搜狐 尋找網址 // 網址為: http://localhost:8080/
+再來看一張圖片 一樣顯上教學附檔的圖檔有順序教學可以看 (流程圖) 主題為公開驗證的意思
+讓使用者作登入google 顯到一個網站 搜尋  console.developers.google.com 他的網址為: https://console.cloud.google.com/projectselector2/apis/dashboard?pli=1&supportedpurview=project
+
+介面有一個資訊 地區台灣 然後同意這個條款這樣 顯示為 已啟用的 API 和服務
+在這個頁面有個右上角 點選建立專案 名稱可以隨便 機構就是沒有機構 在按繼續   等他做好就有一個頁面 
+再來左邊有一個憑證 點下去之後 在按建立憑證 再來點 Oauth 用戶端 ID 再點選 設定同意畫面 
+再來有個 User Type 勾選外部 然後點建立 出現 應用程式資訊 應用程式名稱為 Practice System
+電子郵件就用自己的  再來應用程式網域 有個應用程式首頁填入 自己設定的網址 http://localhost:8080/
+再來開發人員聯絡資訊的電子郵件地址填入 自己的電子郵件 最後點儲存並繼續 一直按到最後 都確定沒有問題就返回資訊首頁
+這邊是為了建立 OAuth 2.0 用戶端 的 ID
+
+再來按一次憑證 按建立憑證 選擇這個 OAuth 用戶端 ID 點進去  看到  建立 OAuth 用戶端 ID
+下面的下拉式選單 選擇 網頁應用程式 再來點建立按鈕 之後就會有 用戶端編號 跟密鑰了
+
+再來回到 vs code 之後找 npmjs 網站 裡面搜尋 passport   網址為: https://www.npmjs.com/package/passport
+終端機在打上指令 npm install passport 裝上模組
+還有一個 npm install passport-google-oauth20
+
+再來我們要增加一個資料夾 叫做 routes 用來製作 route 裡面增加一個文件 叫 auth-route.js
+他這個就會處理跟認證有關的這些路徑都會到這個文件
+打入程式碼  做完這些 
+
+再回到 index.js 再來輸入程式碼 
+
+弄完之後 在 views 資料夾 新增一個文件  叫做 login.ejs 線上課程有程式碼 然後裡面有一段程式碼先刪除 
+叫 <%- include ("partials/message") %> 把她刪除
+
+然後裡面要注意這段 
+
+          <label for="exampleInputEmail1">Email address</label>
+          <input
+            type="email"
+            class="form-control"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+            placeholder="Enter email"
+            name="username"
+          />
+name 是 username
+
+這邊弄好之後  再用終端機 跑 nodemon index.js
+來這個網頁測試看看  點入網頁的 login  
+
+再來把 index.ejs 的 nav 程式碼 複製到 nav.ejs 檔文件裡面  放在 partials 資料夾裡面 
+再回到 index.ejs 在 <body> 下面一行 打入程式碼 導入  nav.ejs  程式碼為: <%- include ("partials/nav") %> 再來
+login.ejs 一樣要貼上這個程式碼 
+
+再來下一個步驟 最外層建立一個資料夾叫做 config 然後在裡面建立一個文檔叫做 passport.js
+再來在最外層再做一個資料夾 叫做  models 在裡面再建立一個文檔叫做  user-model.js
+
+然後開始填入  user-model.js 的程式碼 弄好程式碼做一個模組 再來
+
+到 passport.js 繼續填入程式碼  這邊有一個 可以到 passport 的網站找一個 Start typing 
+裡面有個  passport-google-oauth20 在 npmjs 進入到 passport 裡面右手邊有個主頁點進去 
+網址為: https://www.passportjs.org/packages/  這裡面就找的到
+
+passport-google-oauth20 他的網址為: https://www.passportjs.org/packages/passport-google-oauth20/
+裡面就會告訴你怎麼用 這邊程式碼打完之後
+
+再回到文檔 index.js 然後開一個 多增加一個文檔 .env 檔  把 index.js 裡面的 passport 刪除隱藏起來 
+再來到 .env 文檔 填入程式碼  把 index.js 的 passport 藏到 .env 裡面 
+
+.env 輸入為  DB_CONNECT="mongodb+srv://778899:778899password@cluster0.gfympf8.mongodb.net/?retryWrites=true&w=majority" 
+這樣就把藏好了 再回到  index.js 把  DB_CONNECT 這個貼過來 填入程式碼
+
+之後再到 passport.js 把地的 clientID 跟 clientSecret 隱藏 用跟上面一樣 把它隱藏起來 
+
+程式碼都打好後 回到 index.js 這邊 撰寫程式碼 require /passport
+
+都設定好了 就來測試看看 google login 點進去有一個錯誤問題 要在 google api 憑證雲端 網站 解決問題 這邊做一個設定
+先到憑證 -> OAuth 2.0 用戶端 ID -> 編輯  OAuth用戶端 -> 已授權的重新導向 URI 有個 新增URI ->
+再來點進去之後 要打上網址  http://localhost:8080/auth/google/redirect 前面網址 後面為 passport 所設定的 callbackURL 然後按下儲存
+畫面登入變成用 google 登入 
+
+再來我們要讓它登入會到哪一個頁面  先設定 auth-route.js 程式碼撰寫  再到 passport.js 撰寫程式碼
+
+再來之後 到 routes 的資料夾 裡面增加一個新文件 要來做 關於 profile 文件名稱為   profile-route.js
+
+再回到 index.js 撰寫程式碼 導入模組  導入 profile 模組 
+再來到 profile-route.js 文件 撰寫程式碼  創建一個模組  
+
+再來下一個步驟在 views 裡面創建 一個  profile.ejs 的文檔 撰寫程式碼  
+然後測試完之後 在安裝一個 模組叫做  npm install cookie-session 在終端機打指令
+再來到 passport.js 的文檔 撰寫程式碼   passport.serializeUser(); // 跟 cookie 有關聯的  教學請看 Udemy線上課程的網頁開發全攻略 37節500. 部分 Sessions in Passport
+
+這邊做完之後 再來回到 index.js 這邊  撰寫程式碼 導入 cookieSession 步驟
+
+記得在 index.js 要導入 passport 不然他不會執行
+const passport = require("passport") 
+
+做完之後回到 passport.js 撰寫程式碼  我們要看這個 cookie 的資料  再來撰寫 登入 登出 判斷送來 req 是否認證過
+撰寫程式碼  
+
+要做上面三件事情前  先到 profile-route.js 來用這個 middlware 撰寫 如果沒有驗證過 要先登入 點網頁的 Profile 他會跳到登入 
+
+再來到 profile.ejs 撰寫程式碼   把登入這個人顯示出來 然後 可以稍微看一下 console.log(req.user)
+裡面可以看到有 name 名字就是這樣來的\  <h1>Welcome to <%= user.name %> `s page.</h1>
+那 user 就是從 user-model.js 來的喔 這邊弄好後 
+
+要幫使用者在做一個登出  再來到 auth-route.js 這邊 撰寫程式碼  logOut
+
+撰寫完程式碼之後 再來到  nav.ejs 這邊來  他在 partials/nav.ejs
+
+確認 logOut 是否正確的 
+
+如果我不想再登入 處理 看到 login 按鈕 想必也不用 logout profile 按鈕
+先到 index.js 文檔 撰寫完程式碼     res.render("index", { user: req.user }); 之後
+
+再來到 auth-route.js 文檔撰寫程式碼    res.render("login", { user: req.user });
+
+再來到 profile-route.js 撰寫程式   res.render("profile", { user: req.user });
+
+當我們確認這些值 就回到 nav.ejs 當中 撰寫 他的不顯示邏輯 登入跟不登入顯示的東西
+
+<% if (!user) { %>
+<li class="nav-item">
+  <a class="nav-link" href="/auth/login">Login</a>
+</li>
+<% } %>
+
+大概這樣寫 
+
+再來我們要讓使用者註冊來登入這樣 要做的第一件事情 先來 nav.ejs 這邊 在撰寫邏輯 增加新的 route 來做註冊
+
+然後再來 auth-route.js 文檔這邊 多增加一個 註冊 route
+
+之後再 views 資料夾裡面 增加一個文檔 signup.ejs 撰寫程式碼
+
+再來  auth-route.js 撰寫程式碼 使用者註冊完資料會存取 在終端機加入一個模組 npm install bcrypt  // 導入讓使用者加密
+// 記得加入 user model
+const User = require("../models/user-model");
+
+再來撰寫使用者註冊的邏輯 會出現在資料庫 使用者可能看不懂這些資料 所以要把弄到 如果註冊帳號錯誤就出現在帳號上面
+就不會跳到另一個頁面看不懂 所以用一個 flash 很特別的用法
+
+再來到 index.js 文檔 撰寫程式碼 middlware 是有順序性的 再來  partials 的資料夾裡面再建立一個文檔
+為 message.ejs 再來撰寫程式碼  寫完之後 
+
+再到 auth-route.js 這邊來 做我們的 message  做完之後回到
+
+signup.ejs 文檔 在 <form action= "/auth/signup" m>ethod="POST"> 下面加上 <%- include ("partials/message") %>
+
+再來 login.ejs 也要添加 <%- include ("partials/message") %> 在 <button></button> 底下 添加
+
+再來 測試成功跟失敗出現什麼 
+
+再來要幫他弄安裝相關的 所以用另一套模組  passport-local 安裝至 npm 網址為: https://www.passportjs.org/packages/passport-local/
+網址都有教用法 可以去看看
+
+再來到 passport.js 文檔裡面 來撰寫程式碼 寫完之後 
+
+再來到 auth-route.js 這邊在撰寫一個 route  撰寫完之後 
+
+回到 index.js 這邊 來撰寫程式碼  passport-local 寫他的錯誤訊息 
+
+再來到 message.ejs 撰寫程式 寫完之後就來測試看看 
+
+之後 到 auth-route.js 這邊 撰寫
+
+再來要做一個新的 post 所以到這個 models資料夾  裡面建立一個文檔  post-mode.js 在裡面撰寫程式碼 
+
+寫完之後 再來到  profile-route.js 這邊來 增加完 route 的時候 再來到 views 這邊新增一個文檔  post.ejs 撰寫程式碼 
+
+之後再來到  partials 資料夾 裡面的文檔 nav.ejs 撰寫程式碼 傳寫完之後 我做登入就可以看到 他的 New Post
+
+再點進去 New Post 裡面就有個畫面  你可以打你的 title Content
+
+再來到 profile-route.js 增加一個  post 的 route  再去看一下 post.ejs 的 data name: 一個是 content 跟 title
+
+再回到  profile-route.js 來撰寫完之後 
+
+再來到 profile.ejs 撰寫 加入邏輯 跟上面連接 撰寫程式碼 設定完之後  再來測試看看
+title content date 資訊登入後就會出現在下方
+
+再來 這個 物件 已經百分之  99 完成 要來處理一些小問題 可以進步的地方 再來我們登入事要到 輸入標題跟文字的地方
+才可以在加資料進去
+
+所以現在來處理 再來到 profile-route.js 撰寫程式碼 // 設定我們最後要回去的值 就會回到 輸入標題的地方
+
+再回到 auth-route 這邊來  這邊處理我們登入之後要去哪邊  這個是 loca 部分 
+
+在來處理 google 的部分 在最底下  
+
+之後就來做測試 之後登入 都會導向到 標題 文字那邊  
+
+END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
